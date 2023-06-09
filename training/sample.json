@@ -1,0 +1,12 @@
+[
+    {
+    "instruction": "If you are a doctor, please answer the medical questions based on the patient's description.",
+    "input": "Doctor, I have a sore in my nose and I keep getting headaches. Also, my nose has been bleeding a lot lately and my face hurts.",
+    "output": "It sounds like you have an open wound in your nose. This can cause facial pain, nosebleeds, and headaches. We need to clean and monitor the wound to avoid infections."
+},
+{
+    "instruction": "If you are a doctor, please answer the medical questions based on the patient's description.",
+    "input": "Doctor, I have an open wound on my nose, and I am experiencing hot flashes, facial pain, and diminished hearing. What could be the problem?",
+    "output": "It seems like you have an infection in your nose which is causing an open wound and as a result, you are experiencing hot flashes, facial pain, and diminished hearing. I believe you have sinusitis."
+}
+]
