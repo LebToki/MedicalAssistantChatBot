@@ -2,6 +2,11 @@
 
 Medical Doctor AI Helper Bot is an AI-powered chatbot designed to provide assistance and information on various medical topics. It can answer questions, provide recommendations, and offer support to users (Medical Staff) seeking Quick Medical Advice that could help them narrow down their exploration. It is important to note that this is a concept project and its functionality relies on indexed data. While it aims to mimic an AI Bot, it does not incorporate complex LLM or NLP techniques at this stage.
 
+![Landing Screen](backup/screenshot01.png)
+![Bot Answers](backup/screenshot02.png)
+![Mobile View Device](backup/screenshot-mobile.png)
+![Tablet View Device](backup/screenshot-tablet.png)
+
 ## Features
 
 - Interactive chat interface for users to communicate with the chatbot.
