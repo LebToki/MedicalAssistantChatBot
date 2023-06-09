@@ -50,4 +50,4 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Attribution License. See the [LICENSE](LICENSE) file for details.
