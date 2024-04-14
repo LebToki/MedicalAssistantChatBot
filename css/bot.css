@@ -8,6 +8,13 @@
     --text-secondary: #6e6e80;
     --text-disabled: #acacbe;
     --text-error: var(--color-error);
+
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+    --spacing-small: 8px;
+    --spacing-medium: 16px;
+    --spacing-large: 24px;
 }
 
 * {
@@ -15,6 +22,10 @@
     margin: 0;
     font-family: sans-serif;
     box-sizing: border-box;
+}
+
+html {
+    font-size: calc(14px + (17 - 14) * ((100vw - 320px) / (1600 - 320)));
 }
 
 /* Container */
@@ -43,8 +54,7 @@
     text-shadow: 1px 1px 20x #000000a1;
 }
 /* Navigation Button/Link */
-.pointerlink
-{
+.pointerlink {
     appearance: none;
     background-color: #2ea44f;
     border: 1px solid rgba(27, 31, 35, .15);
@@ -67,6 +77,28 @@
     touch-action: manipulation;
     vertical-align: middle;
     white-space: nowrap;
+}
+
+.pointerlink:hover, .pointerlink:focus {
+    filter: brightness(90%);
+    outline: none; /* Only remove outlines if replacing with another focus indicator */
+}
+
+.pointerlink:active {
+    filter: brightness(85%);
+    box-shadow: rgba(225, 228, 232, .2) 0 1px 0 inset;
+}
+
+
+@media (max-width: 600px) {
+    :root {
+        --text-primary-size: 14px;
+    }
+
+    #header {
+        padding: var(--spacing-small);
+        font-size: var(--text-primary-size);
+    }
 }
 
 /* Arrows index */
@@ -314,9 +346,6 @@
         margin-right: 5px;
         margin-left: 5px;
     }
-}
-
-
 }
 
 /* Styles for iPads */
