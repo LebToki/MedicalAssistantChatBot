@@ -39,15 +39,25 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 
 **Key Enhancements:
 Prepared Statements: Utilized across all SQL operations to enhance security and prevent SQL injection.
+
 Database Connection Error Handling: Immediate checks for errors upon database connection attempts to ensure reliability and prompt error reporting.
+
 Refactoring: Moved core functionalities into a separate function, getChatbotResponse, to improve the readability and maintainability of the code.
+
 Separation of Database Config: Shifted database configuration settings to a separate file to centralize database management settings and enhance security.
+
 Database Structure and Performance Improvements:
+
 Table Changes and Index Introduction: Enhanced database table structures and introduced indexes to optimize data retrieval and performance.
+
 Full-text Search: Recommended for efficient text searching capabilities, enabling complex query handling and improved search performance.
+
 Normalization: Proposed database normalization to reduce redundancy by dividing data into related tables, enhancing data integrity and performance.
+
 Database Engine Recommendations: Suggested appropriate database engines (e.g., InnoDB, MyISAM) based on transaction support needs and read/write speed requirements.
+
 Script Specific Updates:
+
 fetch_response.php:
 
 Function Documentation: Added documentation for searchAnswers to clarify its purpose and usage.
@@ -55,15 +65,18 @@ SQL Query Optimization: Ensured SQL queries are optimized for performance, parti
 Encapsulation and Modularity: Encouraged the use of classes or separate functions for database interactions to simplify code management.
 
 index.php:
+
 JavaScript Consolidation: Unified JavaScript into a single block for better management and reduced HTTP requests.
 Error Handling Improvements: Corrected the placement of .catch() for fetch operations to ensure errors are appropriately caught and handled.
 
 ingest.php:
+
 File Filtering: Configured to process only .json files to avoid unnecessary computation.
 Error Checks: Enhanced error handling for JSON decoding to ensure robust data processing.
 Database Interaction Optimization: Prepared SQL statements outside loops for improved efficiency and reduced processing overhead.
 
 General Changes:
+
 UI and Interaction Enhancements: Improved user interface feedback and interaction, ensuring that elements like buttons provide immediate and intuitive feedback to actions.
 Performance Enhancements: Adjusted scripts and styles to optimize load times and interaction responsiveness.
 This summary encapsulates all major and critical updates made in version 1.2, providing a clear view of improvements and optimizations intended to enhance the functionality, security, and user experience of the Medical Doctor AI Helper Bot.
