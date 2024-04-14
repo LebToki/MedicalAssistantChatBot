@@ -1,57 +1,53 @@
 <?php
-$directory = __DIR__ . '/training/';
-$files = scandir($directory);
-
-// Establish a connection to the database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "phpbot";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Prepare a query to check for duplicates
-$checkDuplicateQuery = "SELECT COUNT(*) FROM chatbot WHERE messages = ? AND response = ?";
-$checkDuplicateStmt = $conn->prepare($checkDuplicateQuery);
-$checkDuplicateStmt->bind_param("ss", $message, $response);
-
-// Prepare a query to insert new records
-$insertQuery = "INSERT INTO chatbot (messages, response) VALUES (?, ?)";
-$insertStmt = $conn->prepare($insertQuery);
-$insertStmt->bind_param("ss", $message, $response);
-
-// Iterate over the files in the directory
-foreach ($files as $file) {
-    if (is_file($directory . $file)) {
+    $directory = __DIR__ . '/training/';
+    $files = array_filter(scandir($directory), function($file) use ($directory) {
+        return is_file($directory . $file) && pathinfo($file, PATHINFO_EXTENSION) === 'json';
+    });
+    
+    require 'database_config.php';
+    
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    
+    $conn->autocommit(FALSE); // Start transaction
+    
+    $checkDuplicateStmt = $conn->prepare("SELECT COUNT(*) FROM chatbot WHERE messages = ? AND response = ?");
+    $insertStmt = $conn->prepare("INSERT INTO chatbot (messages, response) VALUES (?, ?)");
+    
+    foreach ($files as $file) {
         $data = json_decode(file_get_contents($directory . $file), true);
-
+        if (!$data) {
+            continue; // Skip if data is not valid JSON
+        }
+        
         foreach ($data as $item) {
-            if (isset($item['input']) && isset($item['output'])) {
-                $message = $item['input'];
-                $response = $item['output'];
-
-                // Check if the record already exists
-                $checkDuplicateStmt->execute();
-                $checkDuplicateStmt->store_result();
-                $checkDuplicateStmt->bind_result($count);
-                $checkDuplicateStmt->fetch();
-
-                if ($count == 0) {
-                    // Insert the new record
-                    $insertStmt->execute();
+            if (!isset($item['input'], $item['output'])) {
+                continue; // Skip if essential data is missing
+            }
+            
+            $message = $item['input'];
+            $response = $item['output'];
+            
+            $checkDuplicateStmt->bind_param("ss", $message, $response);
+            $checkDuplicateStmt->execute();
+            $checkDuplicateStmt->store_result();
+            $checkDuplicateStmt->bind_result($count);
+            $checkDuplicateStmt->fetch();
+            
+            if ($count == 0) {
+                $insertStmt->bind_param("ss", $message, $response);
+                if (!$insertStmt->execute()) {
+                    $conn->rollback(); // Rollback if an insert fails
+                    die("Failed to insert data: " . $insertStmt->error);
                 }
             }
         }
     }
-}
-
-// Close the statements and the database connection
-$checkDuplicateStmt->close();
-$insertStmt->close();
-$conn->close();
+    
+    $conn->commit(); // Commit the transaction
+    $checkDuplicateStmt->close();
+    $insertStmt->close();
+    $conn->close();
 ?>
