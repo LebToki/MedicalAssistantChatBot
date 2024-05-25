@@ -43,8 +43,10 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 ## Configure the database connection details in the database_config.php file
 **database_config.php**
 
-**run composer require vlucas/phpdotenv**
-
+```<npm>
+composer require vlucas/phpdotenv
+```
+to get this working
 // Load environment variables from a .env file if available
 if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
