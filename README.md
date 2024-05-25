@@ -74,9 +74,10 @@ define('DB_NAME', getenv('DB_NAME') ?: 'phpbot');
 
 
 Open the application in a web browser to start interacting with the chatbot.
+
 The system is tested with over 200k Medical Questions and Answers with full prepared statements and indexing.
 
-- Managed Input Sanitization and SQL Injection hacks.
+
 
 ## Changelog
 
