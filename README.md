@@ -46,8 +46,13 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 ```<npm>
 composer require vlucas/phpdotenv
 ```
+
 to get this working
+
+```<php>
 // Load environment variables from a .env file if available
+
+composer require vlucas/phpdotenv
 if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
@@ -64,6 +69,9 @@ define('DB_PASS', getenv('DB_PASS') ?: '');
 
 **Database name**  match yours
 define('DB_NAME', getenv('DB_NAME') ?: 'phpbot');
+```
+
+
 
 Open the application in a web browser to start interacting with the chatbot.
 The system is tested with over 200k Medical Questions and Answers with full prepared statements and indexing.
