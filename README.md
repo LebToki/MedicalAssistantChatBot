@@ -34,67 +34,89 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 - `css/`: Directory containing CSS stylesheets for styling the chatbot interface.
 - `assets/`: Directory containing images and other static assets used in the application.
 
+## Configure the database connection details in the database_config.php file
+// database_config.php
+
+// Load environment variables from a .env file if available
+if (file_exists(__DIR__ . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
+
+// Database host
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+
+// Database username
+define('DB_USER', getenv('DB_USER') ?: 'root');
+
+// Database password
+define('DB_PASS', getenv('DB_PASS') ?: '');
+
+// Database name
+define('DB_NAME', getenv('DB_NAME') ?: 'phpbot');
+
+Open the application in a web browser to start interacting with the chatbot.
+
+The system is tested with over 200k Medical Questions and Answers with full prepared statements and indexing.
+
+Managed Input Sanitization and SQL Injection hacks.
+
+##  Directory Structure
+index.php: The main file that contains the chatbot interface and handles user interactions.
+bot.php: Handles the server-side processing of user messages and retrieves appropriate responses from the database.
+ingest.php: Imports data from JSON files into the chatbot's database for expanding its knowledge base.
+fetch_response.php: Retrieves a random response from the database for displaying in the chatbot interface.
+training/: Directory containing JSON files with additional data to be ingested into the chatbot's database.
+css/: Directory containing CSS stylesheets for styling the chatbot interface.
+assets/: Directory containing images and other static assets used in the application.
+
 ## Changelog
-**v1.2 - Feature Update (2024-04-14)
 
-**Key Enhancements:
-Prepared Statements: Utilized across all SQL operations to enhance security and prevent SQL injection.
+### v1.2 - Feature Update (2024-04-14)
 
-Database Connection Error Handling: Immediate checks for errors upon database connection attempts to ensure reliability and prompt error reporting.
+**Key Enhancements:**
+- Prepared Statements: Utilized across all SQL operations to enhance security and prevent SQL injection.
+- Database Connection Error Handling: Immediate checks for errors upon database connection attempts to ensure reliability and prompt error reporting.
+- Refactoring: Moved core functionalities into a separate function, getChatbotResponse, to improve the readability and maintainability of the code.
+- Separation of Database Config: Shifted database configuration settings to a separate file to centralize database management settings and enhance security.
 
-Refactoring: Moved core functionalities into a separate function, getChatbotResponse, to improve the readability and maintainability of the code.
+**Database Structure and Performance Improvements:**
+- Table Changes and Index Introduction: Enhanced database table structures and introduced indexes to optimize data retrieval and performance.
+- Full-text Search: Recommended for efficient text searching capabilities, enabling complex query handling and improved search performance.
+- Normalization: Proposed database normalization to reduce redundancy by dividing data into related tables, enhancing data integrity and performance.
+- Database Engine Recommendations: Suggested appropriate database engines (e.g., InnoDB, MyISAM) based on transaction support needs and read/write speed requirements.
 
-Separation of Database Config: Shifted database configuration settings to a separate file to centralize database management settings and enhance security.
+**Script Specific Updates:**
+- fetch_response.php:
+  - Function Documentation: Added documentation for searchAnswers to clarify its purpose and usage.
+  - SQL Query Optimization: Ensured SQL queries are optimized for performance, particularly for sorting and searching large datasets.
+  - Encapsulation and Modularity: Encouraged the use of classes or separate functions for database interactions to simplify code management.
+- index.php:
+  - JavaScript Consolidation: Unified JavaScript into a single block for better management and reduced HTTP requests.
+  - Error Handling Improvements: Corrected the placement of .catch() for fetch operations to ensure errors are appropriately caught and handled.
+- ingest.php:
+  - File Filtering: Configured to process only .json files to avoid unnecessary computation.
+  - Error Checks: Enhanced error handling for JSON decoding to ensure robust data processing.
+  - Database Interaction Optimization: Prepared SQL statements outside loops for improved efficiency and reduced processing overhead.
 
-Database Structure and Performance Improvements:
+**General Changes:**
+- UI and Interaction Enhancements: Improved user interface feedback and interaction, ensuring that elements like buttons provide immediate and intuitive feedback to actions.
+- Performance Enhancements: Adjusted scripts and styles to optimize load times and interaction responsiveness.
+- This summary encapsulates all major and critical updates made in version 1.2, providing a clear view of improvements and optimizations intended to enhance the functionality, security, and user experience of the Medical Doctor AI Helper Bot.
 
-Table Changes and Index Introduction: Enhanced database table structures and introduced indexes to optimize data retrieval and performance.
-
-Full-text Search: Recommended for efficient text searching capabilities, enabling complex query handling and improved search performance.
-
-Normalization: Proposed database normalization to reduce redundancy by dividing data into related tables, enhancing data integrity and performance.
-
-Database Engine Recommendations: Suggested appropriate database engines (e.g., InnoDB, MyISAM) based on transaction support needs and read/write speed requirements.
-
-Script Specific Updates:
-
-fetch_response.php:
-
-Function Documentation: Added documentation for searchAnswers to clarify its purpose and usage.
-SQL Query Optimization: Ensured SQL queries are optimized for performance, particularly for sorting and searching large datasets.
-Encapsulation and Modularity: Encouraged the use of classes or separate functions for database interactions to simplify code management.
-
-index.php:
-
-JavaScript Consolidation: Unified JavaScript into a single block for better management and reduced HTTP requests.
-Error Handling Improvements: Corrected the placement of .catch() for fetch operations to ensure errors are appropriately caught and handled.
-
-ingest.php:
-
-File Filtering: Configured to process only .json files to avoid unnecessary computation.
-Error Checks: Enhanced error handling for JSON decoding to ensure robust data processing.
-Database Interaction Optimization: Prepared SQL statements outside loops for improved efficiency and reduced processing overhead.
-
-General Changes:
-
-UI and Interaction Enhancements: Improved user interface feedback and interaction, ensuring that elements like buttons provide immediate and intuitive feedback to actions.
-Performance Enhancements: Adjusted scripts and styles to optimize load times and interaction responsiveness.
-This summary encapsulates all major and critical updates made in version 1.2, providing a clear view of improvements and optimizations intended to enhance the functionality, security, and user experience of the Medical Doctor AI Helper Bot.
-  
 ### v1.1.0 - Feature Update (2023-06-09)
 - Added progress bar and visual feedback during data ingestion.
 - Improved error handling and error reporting during ingestion.
 - Implemented input sanitization to enhance security.
 - Updated CSS styles for better responsiveness on small screens and tablets.
 - Fixed bugs and minor issues reported by users.
+
 ### v1.0.0 - Initial Release 
 - Implemented basic chatbot functionality.
 - Set up database structure and imported initial data.
 - Created user interface for chat interactions.
 - Added ingestion script for importing additional data.
 - Implemented server-side processing of user messages.
-
-
 
 ## License
 
