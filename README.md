@@ -72,6 +72,35 @@ assets/: Directory containing images and other static assets used in the applica
 
 ## Changelog
 
+### Version 2.0 (2024-05-25)
+Bug Fixes:
+
+Fixed issue with Dotenv class not found by including the Composer autoload file.
+Resolved SQLSTATE[42S22] error by removing the non-existent relevance column in the ORDER BY clause.
+Improvements:
+
+Enhanced fetch_response.php to correctly query available columns and handle search operations.
+Improved error handling and added debug points to ingest.php for better diagnostics.
+Optimized the script to provide meaningful error messages and trace the execution path.
+Features:
+
+Added a file drop area to ingest.php for uploading JSON files with drag-and-drop functionality.
+Introduced a spinner to indicate processing status during file uploads.
+Implemented a progress bar to show the upload progress visually.
+Enhanced user experience by centering the file drop area on the page for better accessibility.
+Added detailed debug points in ingest.php to trace the script execution and identify potential issues.
+Cosmetic Changes:
+
+Updated the CSS to ensure the file drop area is centered both vertically and horizontally.
+Improved the visual styling of the ingest.php page to match the overall design of the application.
+Miscellaneous:
+
+Ensured that the AJAX request handling in ingest.php is robust and provides accurate feedback to the user.
+Simplified the form data handling and streamlined the file upload process.
+Summary
+These updates aim to enhance the stability, usability, and visual appeal of the Medical Doctor AI Assistant Bot, providing a smoother and more intuitive experience for users while addressing key bugs and introducing useful features.
+
+
 ### v1.2 - Feature Update (2024-04-14)
 
 **Key Enhancements:**
