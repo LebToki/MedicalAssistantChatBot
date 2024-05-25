@@ -27,11 +27,17 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 ## Directory Structure
 
 - `index.php`: The main file that contains the chatbot interface and handles user interactions.
+
 - `bot.php`: Handles the server-side processing of user messages and retrieves appropriate responses from the database.
+
 - `ingest.php`: Imports data from JSON files into the chatbot's database for expanding its knowledge base.
+
 - `fetch_response.php`: Retrieves a random response from the database for displaying in the chatbot interface.
+
 - `training/`: Directory containing JSON files with additional data to be ingested into the chatbot's database.
+
 - `css/`: Directory containing CSS stylesheets for styling the chatbot interface.
+
 - `assets/`: Directory containing images and other static assets used in the application.
 
 ## Configure the database connection details in the database_config.php file
