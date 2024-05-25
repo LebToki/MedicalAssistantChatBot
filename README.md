@@ -44,6 +44,7 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 **database_config.php**
 
 **run composer require vlucas/phpdotenv**
+
 // Load environment variables from a .env file if available
 if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
