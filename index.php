@@ -471,8 +471,9 @@ define('BASE_URL', $protocol . $host . $scriptDir);
 
         $("#send").on("click", function() {
             var userMessage = $("#messages").val();
+            var safeMessage = $('<div>').text(userMessage).html();
             $("#messagedisplaysection").append(
-                `<div class="chat usermessages"><div class="user-avatar"></div>${userMessage}</div>`
+                `<div class="chat usermessages"><div class="user-avatar"></div>${safeMessage}</div>`
             ).scrollTop($("#messagedisplaysection")[0].scrollHeight);
 
             $.post("bot.php", {
