@@ -4,7 +4,10 @@
 //
 //	echo 'Debug: Starting script execution.<br>';
 	
-	require 'database_config.php';
+        require 'database_config.php';
+
+        // Debug flag controls optional verbose output
+        $debug = false;
 	
 	try {
 		//echo 'Debug: Connecting to database.<br>';
@@ -16,10 +19,14 @@
 		die('Connection failed: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 	}
 	
-	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		echo 'Debug: Processing POST request.<br>';
-		if (isset($_FILES['jsonFiles']) && count($_FILES['jsonFiles']['name']) > 0) {
-			echo 'Debug: Files detected.<br>';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if ($debug) {
+                        echo 'Debug: Processing POST request.<br>';
+                }
+                if (isset($_FILES['jsonFiles']) && count($_FILES['jsonFiles']['name']) > 0) {
+                        if ($debug) {
+                                echo 'Debug: Files detected.<br>';
+                        }
 			$totalFiles = count($_FILES['jsonFiles']['name']);
 			$processedFiles = 0;
 			$errorFiles = [];
@@ -27,16 +34,20 @@
 			$checkDuplicateStmt = $conn->prepare("SELECT COUNT(*) FROM chatbot WHERE messages = :message AND response = :response");
 			$insertStmt = $conn->prepare("INSERT INTO chatbot (messages, response) VALUES (:message, :response)");
 			
-			for ($i = 0; $i < $totalFiles; $i++) {
-				$fileName = $_FILES['jsonFiles']['tmp_name'][$i];
-				echo 'Debug: Processing file: ' . $_FILES['jsonFiles']['name'][$i] . '<br>';
-				$data = json_decode(file_get_contents($fileName), true);
+                        for ($i = 0; $i < $totalFiles; $i++) {
+                                $fileName = $_FILES['jsonFiles']['tmp_name'][$i];
+                                if ($debug) {
+                                        echo 'Debug: Processing file: ' . $_FILES['jsonFiles']['name'][$i] . '<br>';
+                                }
+                                $data = json_decode(file_get_contents($fileName), true);
 				
-				if (json_last_error() !== JSON_ERROR_NONE) {
-					echo 'Debug: JSON error in file: ' . $_FILES['jsonFiles']['name'][$i] . '<br>';
-					$errorFiles[] = $_FILES['jsonFiles']['name'][$i];
-					continue;
-				}
+                                if (json_last_error() !== JSON_ERROR_NONE) {
+                                        if ($debug) {
+                                                echo 'Debug: JSON error in file: ' . $_FILES['jsonFiles']['name'][$i] . '<br>';
+                                        }
+                                        $errorFiles[] = $_FILES['jsonFiles']['name'][$i];
+                                        continue;
+                                }
 				
 				foreach ($data as $item) {
 					if (isset($item['input'], $item['output'])) {
@@ -47,14 +58,16 @@
 						$checkDuplicateStmt->execute();
 						$count = $checkDuplicateStmt->fetchColumn();
 						
-						if ($count == 0) {
-							$insertStmt->bindParam(':message', $message);
-							$insertStmt->bindParam(':response', $response);
-							if (!$insertStmt->execute()) {
-								echo 'Debug: Insert failed for message: ' . $message . '<br>';
-								$errorFiles[] = $_FILES['jsonFiles']['name'][$i];
-							}
-						}
+                                                if ($count == 0) {
+                                                        $insertStmt->bindParam(':message', $message);
+                                                        $insertStmt->bindParam(':response', $response);
+                                                        if (!$insertStmt->execute()) {
+                                                                if ($debug) {
+                                                                        echo 'Debug: Insert failed for message: ' . $message . '<br>';
+                                                                }
+                                                                $errorFiles[] = $_FILES['jsonFiles']['name'][$i];
+                                                        }
+                                                }
 					}
 				}
 				$processedFiles++;
