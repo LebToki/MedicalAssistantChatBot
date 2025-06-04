@@ -1,0 +1,24 @@
+/vendor/
+.env
+*.db
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE config
+/.idea/
+/.vscode/
+
+# Node modules (if any)
+node_modules/
+
+# Caches and temporary files
+/tmp/
+/cache/
+
+# Backup files
+backup/
