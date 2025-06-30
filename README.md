@@ -19,10 +19,13 @@ To get started with the Medical Doctor AI Helper Bot, follow these steps:
 1. Clone the repository to your local machine.
 2. Set up a local web server environment (e.g., Apache, Nginx, LARAGON/MAMP or XAMPP stacks).
 3. Import the database structure and sample data using the provided SQL file. Feel free to import your own Q/A.
-4. Configure the database connection details in the PHP files (will introduce a config.php file in time maybe).
-5. Open the application in a web browser to start interacting with the chatbot.
-6. Tested with over 200k Medical Questions and Answers with full prepared statements and indexing.
-7. Managed Input Sanitization and SQL Injection hacks.
+4. Run `composer install` to install PHP dependencies.
+5. Create a `.env` file with your database credentials (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`).
+6. Open the application in a web browser to start interacting with the chatbot.
+7. The system has been tested with over 200k medical questions and answers using prepared statements and indexing.
+8. Input sanitization helps mitigate SQL injection attacks.
+
+The application automatically calculates a `BASE_URL` constant at runtime to avoid hard-coded links.
 
 ## Directory Structure
 
