@@ -1,19 +1,5 @@
 <?php
-// Determine if SSL is used
-$isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
-
-// Use the right protocol
-$protocol = $isSecure ? 'https://' : 'http://';
-
-// Get the server host
-$host = $_SERVER['HTTP_HOST'];
-
-// Get the current script's directory and normalize it
-$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-$scriptDir = rtrim($scriptDir, '/') . '/'; // Ensure trailing slash
-
-// Define BASE_URL
-define('BASE_URL', $protocol . $host . $scriptDir);
+require_once "bootstrap.php";
 ?>
 
 <!DOCTYPE html>

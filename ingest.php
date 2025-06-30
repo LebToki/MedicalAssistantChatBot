@@ -1,4 +1,5 @@
 <?php
+require_once "bootstrap.php";
 //	error_reporting(E_ALL);
 //	ini_set('display_errors', 1);
 //
@@ -90,7 +91,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Medical Doctor AI Assistant Bot > Ingest Client</title>
-	<link rel="icon" type="image/png" href="assets/aibot.png">
+	<link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>assets/aibot.png">
 	<link rel="stylesheet" href="css/bot.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<style>
@@ -432,7 +433,7 @@
 <body>
 <div id="container">
 	<div id="header">
-		<img src="assets/ingest.png" alt="Ingest Icon" style="width:40px;">
+		<img src="<?php echo BASE_URL; ?>assets/ingest.png" alt="Ingest Icon" style="width:40px;">
 		<span>Medical Doctor AI Assistant Bot > Ingest Client</span> &nbsp;&nbsp;&nbsp;
 		<small style="font-weight: 400; font-size:13px;">
 			<a href="index.php" class="pointerlink">
