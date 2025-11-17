@@ -176,7 +176,67 @@ require_once "bootstrap.php";
         top: 100px;
         padding: 0 20px;
         overflow-y: auto;
-				color: #fff!important;
+        color: #fff!important;
+    }
+
+    .message-content-wrapper {
+        flex: 1;
+    }
+
+    .source-badge {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background: rgba(25, 195, 125, 0.2);
+        border-radius: 5px;
+        font-size: 11px;
+        color: #19c37d;
+        display: inline-block;
+    }
+
+    .response-time {
+        margin-top: 5px;
+        font-size: 10px;
+        color: #acacbe;
+    }
+
+    .loading-dots {
+        display: inline-flex;
+        gap: 5px;
+    }
+
+    .loading-dots span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #19c37d;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .loading-dots span:nth-child(1) {
+        animation-delay: -0.32s;
+    }
+
+    .loading-dots span:nth-child(2) {
+        animation-delay: -0.16s;
+    }
+
+    @keyframes bounce {
+        0%, 80%, 100% {
+            transform: scale(0);
+        }
+        40% {
+            transform: scale(1);
+        }
+    }
+
+    .error-message {
+        background-color: rgba(239, 65, 70, 0.2) !important;
+        border-left: 3px solid #ef4146;
+    }
+
+    #send:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 
     .chat {
@@ -422,9 +482,15 @@ require_once "bootstrap.php";
         <div id="header">
             <img src="<?php echo BASE_URL; ?>assets/aibot.png" alt="avatar" style="width:40px;">
             <span>Medical Doctor AI Assistant Bot</span>&nbsp;&nbsp;&nbsp;
-					<small style="font-weight: 400; font-size:13px;">
+            <small style="font-weight: 400; font-size:13px;">
+                <a href="<?php echo BASE_URL; ?>settings.php" class="pointerlink" style="margin-right: 10px;">
+                    <i class="fa fa-cog"></i>&nbsp; Settings
+                </a>
+                <a href="<?php echo BASE_URL; ?>documents.php" class="pointerlink" style="margin-right: 10px;">
+                    <i class="fa fa-file-text"></i>&nbsp; Documents
+                </a>
                 <a href="<?php echo BASE_URL; ?>ingest.php" class="pointerlink">
-                    <i class="arrow left"></i>&nbsp; Visit the Data Ingest Station
+                    <i class="arrow left"></i>&nbsp; Data Ingest Station
                 </a>
             </small>
         </div>
@@ -450,41 +516,117 @@ require_once "bootstrap.php";
     <script>
     $(document).ready(function() {
         $("#send").hide(); // Initially hide the send button
+        var isLoading = false;
 
-        $("#messages").on("keyup", function() {
+        $("#messages").on("keyup", function(e) {
             $("#send").toggle(!!$(this).val());
+            if (e.keyCode === 13 && !isLoading && $(this).val().trim()) {
+                $("#send").click();
+            }
         });
 
+        function addLoadingIndicator() {
+            var loadingHtml = `
+                <div class="chat botmessages loading-message" id="loading-indicator">
+                    <div class="bot-avatar"></div>
+                    <div class="loading-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span style="margin-left: 10px;">Searching knowledge base...</span>
+                </div>
+            `;
+            $("#messagedisplaysection").append(loadingHtml).scrollTop($("#messagedisplaysection")[0].scrollHeight);
+        }
+
+        function removeLoadingIndicator() {
+            $("#loading-indicator").remove();
+        }
+
         $("#send").on("click", function() {
-            var userMessage = $("#messages").val();
+            if (isLoading) return;
+            
+            var userMessage = $("#messages").val().trim();
+            if (!userMessage) return;
+
             var safeMessage = $('<div>').text(userMessage).html();
             $("#messagedisplaysection").append(
                 `<div class="chat usermessages"><div class="user-avatar"></div>${safeMessage}</div>`
             ).scrollTop($("#messagedisplaysection")[0].scrollHeight);
 
-            $.post("bot.php", {
-                messageValue: userMessage
-            }, function(response) {
-                $("#messagedisplaysection").append(
-                    `<div class="chat botmessages"><div class="bot-avatar"></div>${response}</div>`
-                ).scrollTop($("#messagedisplaysection")[0].scrollHeight);
-            });
+            isLoading = true;
+            addLoadingIndicator();
+            $(this).prop('disabled', true);
 
-            $("#messages").val('');
-            $(this).hide();
+            $.ajax({
+                url: "bot.php",
+                method: "POST",
+                data: { messageValue: userMessage },
+                dataType: "json",
+                success: function(data) {
+                    removeLoadingIndicator();
+                    
+                    if (data.success) {
+                        var responseHtml = data.response.replace(/\n/g, '<br>');
+                        var sourcesHtml = '';
+                        if (data.sources && data.sources.length > 0) {
+                            sourcesHtml = `<div class="source-badge">Sources: ${data.sources.join(', ')}</div>`;
+                        }
+                        var timeHtml = data.response_time_ms ? `<div class="response-time">${data.response_time_ms}ms</div>` : '';
+                        
+                        var botMessageHtml = `
+                            <div class="chat botmessages">
+                                <div class="bot-avatar"></div>
+                                <div class="message-content-wrapper">
+                                    ${responseHtml}
+                                    ${sourcesHtml}
+                                    ${timeHtml}
+                                </div>
+                            </div>
+                        `;
+                        $("#messagedisplaysection").append(botMessageHtml).scrollTop($("#messagedisplaysection")[0].scrollHeight);
+                    } else {
+                        var errorHtml = `
+                            <div class="chat botmessages error-message">
+                                <div class="bot-avatar"></div>
+                                <div>Error: ${data.error || 'An unknown error occurred'}</div>
+                            </div>
+                        `;
+                        $("#messagedisplaysection").append(errorHtml).scrollTop($("#messagedisplaysection")[0].scrollHeight);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    removeLoadingIndicator();
+                    var errorHtml = `
+                        <div class="chat botmessages error-message">
+                            <div class="bot-avatar"></div>
+                            <div>Connection error. Please try again.</div>
+                        </div>
+                    `;
+                    $("#messagedisplaysection").append(errorHtml).scrollTop($("#messagedisplaysection")[0].scrollHeight);
+                },
+                complete: function() {
+                    isLoading = false;
+                    $("#send").prop('disabled', false);
+                    $("#messages").val('');
+                    $("#send").hide();
+                    $("#messages").focus();
+                }
+            });
         });
 
         // Fetch initial bot response
         fetch('<?php echo BASE_URL; ?>fetch_response.php')
             .then(response => response.text())
             .then(data => {
-                new Typed('#response', {
-                    strings: [data],
-                    typeSpeed: 40,
-                    showCursor: true,
-                    cursorChar: '|',
-                    autoInsertCss: true,
-                });
+                if (data && data.trim()) {
+                    new Typed('#response', {
+                        strings: [data],
+                        typeSpeed: 40,
+                        showCursor: true,
+                        cursorChar: '|',
+                        autoInsertCss: true,
+                    });
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);
